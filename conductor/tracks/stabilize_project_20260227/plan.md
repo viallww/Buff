@@ -12,7 +12,7 @@
 - [x] Task: Fix missing documentation [3913020]
     - [ ] Add an `@docs Buff` block to `docs/src/index.md`.
     - [ ] Run `julia --project=docs docs/make.jl` locally to verify the build passes without `:missing_docs` errors.
-- [ ] Task: Fix broken tests
+- [x] Task: Fix broken tests [9e78b82]
     - [ ] Add `using Statistics` to `test/test_outliers.jl`.
     - [ ] Run the full test suite locally: `julia --project -e 'using Pkg; Pkg.test()'`.
     - [ ] Identify and fix any further test failures.
