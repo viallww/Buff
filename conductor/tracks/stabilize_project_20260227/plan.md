@@ -4,7 +4,7 @@
 - [x] Task: Update CI.yml trigger logic [99ce21a]
     - [ ] Modify `.github/workflows/CI.yml` to trigger on `pull_request` and `push` (only `main`).
     - [ ] Verify the change by pushing to a branch and checking CI triggers.
-- [ ] Task: Fix Project.toml dependencies & [compat]
+- [x] Task: Fix Project.toml dependencies & [compat] [bfc1203]
     - [ ] Add `[compat]` entries for `Test`, `Statistics`, and `LinearAlgebra`.
     - [ ] Run `julia --project -e 'using Pkg; Pkg.test()'` locally to verify the environment.
 
