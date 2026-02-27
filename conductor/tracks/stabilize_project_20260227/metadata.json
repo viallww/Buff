@@ -1,0 +1,8 @@
+{
+  "track_id": "stabilize_project_20260227",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-02-27T22:38:00Z",
+  "updated_at": "2026-02-27T22:38:00Z",
+  "description": "Fix broken tests and CI pipeline. Stabilize the project by resolving package registration issues, missing documentation, and duplicate CI triggers."
+}
