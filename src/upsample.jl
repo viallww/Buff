@@ -41,7 +41,7 @@ function upsample_linear(
     n >= 2          || throw(ArgumentError("Need at least 2 points to upsample"))
 
     xf    = float.(x)
-    itp   = LinearInterpolation(xf, float.(y); extrapolation_bc = Flat())
+    itp   = linear_interpolation(xf, float.(y); extrapolation_bc = Flat())
     x_new = range(xf[1], xf[end]; length = (n - 1) * factor + 1)
     y_new = itp.(x_new)
 
@@ -57,7 +57,7 @@ function upsample_linear(
 ) where {Tx<:Real,Ty<:Real}
     length(x) == length(y) || throw(DimensionMismatch("x and y must have same length"))
 
-    itp   = LinearInterpolation(float.(x), float.(y); extrapolation_bc = Flat())
+    itp   = linear_interpolation(float.(x), float.(y); extrapolation_bc = Flat())
     y_new = itp.(x_new)
 
     if plot;  _show_upsample_plot(x, y, x_new, y_new, "Linear")  end

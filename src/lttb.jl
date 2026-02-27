@@ -9,7 +9,7 @@ export lttb
 # ---------------------------------------------------------------------------
 
 """
-    lttb(y, n_out; plot=false) -> Vector
+    lttb(y, n_out; plot=false) -> (x_out, y_out)
 
 Downsample 1-D signal `y` from `length(y)` points to `n_out` points using the
 Largest-Triangle-Three-Buckets algorithm, which preserves visual fidelity.
@@ -25,9 +25,9 @@ function lttb(
     y::AbstractVector{T},
     n_out::Integer;
     plot::Bool = false,
-)::Vector{T} where {T<:Real}
-    x = collect(one(T):T(length(y)))
-    return lttb(x, y, n_out; plot = plot)
+)::Tuple{Vector{float(T)},Vector{float(T)}} where {T<:Real}
+    x = collect(float(T), 1:length(y))
+    return lttb(x, float.(y), n_out; plot = plot)
 end
 
 """
@@ -84,16 +84,25 @@ function _lttb_indices(
 
     for i in 1:(n_out-2)
         # Next-bucket average (look-ahead)
+        # The i-th bucket (1-based) covers index range [floor(i*bucket_size)+2, floor((i+1)*bucket_size)+1]
+        # We need the average of the NEXT bucket (i+1)
         next_start = floor(Int, (i + 1) * bucket_size) + 2
-        next_end   = min(floor(Int, (i + 2) * bucket_size) + 1, n)
-        avg_x = mean(view(x, next_start:next_end))
-        avg_y = mean(view(y, next_start:next_end))
+        next_end   = min(floor(Int, (i + 2) * bucket_size) + 1, n - 1)
+        
+        # Guard against empty next-bucket (can happen for very small n or specific n_out)
+        if next_start > next_end
+            avg_x = x[n]
+            avg_y = y[n]
+        else
+            avg_x = mean(view(x, next_start:next_end))
+            avg_y = mean(view(y, next_start:next_end))
+        end
 
         # Current bucket range
         cur_start = floor(Int, i * bucket_size) + 2
-        cur_end   = min(floor(Int, (i + 1) * bucket_size) + 1, n)
+        cur_end   = min(floor(Int, (i + 1) * bucket_size) + 1, n - 1)
 
-        max_area  = -Inf
+        max_area  = -1.0
         max_idx   = cur_start
         xa, ya    = x[a], y[a]
 

@@ -17,6 +17,12 @@ interface to common signal-processing operations:
 using Buff
 ```
 
+## Reference
+
+```@docs
+Buff
+```
+
 ## Table of contents
 
 ```@contents

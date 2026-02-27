@@ -1,7 +1,7 @@
 name = "Buff"
 uuid = "eecccd9e-c0b6-4062-a7b1-c47d1d274c9c"
-authors = ["Buff Contributors"]
 version = "0.1.0"
+authors = ["Buff Contributors"]
 
 [deps]
 DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
@@ -15,13 +15,17 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 [compat]
 DSP = "0.7, 0.8"
 Interpolations = "0.15, 0.16"
+LinearAlgebra = "1"
 PlotlyJS = "0.18"
 Reexport = "1"
+Statistics = "1"
 StatsBase = "0.33, 0.34"
 julia = "1.10"
 
 [extras]
+Coverage = "a2441757-f6aa-5fb2-8edb-039e3f45d037"
+LocalCoverage = "5f6e1e16-694c-5876-87ef-16b5274f298e"
 Test = "8dfed614-e22c-358a-b080-26c06603136e"
 
 [targets]
-test = ["Test"]
+test = ["Test", "Coverage", "LocalCoverage"]
