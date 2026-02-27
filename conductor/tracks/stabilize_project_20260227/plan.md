@@ -9,7 +9,7 @@
     - [ ] Run `julia --project -e 'using Pkg; Pkg.test()'` locally to verify the environment.
 
 ## Phase 2: Code and Documentation Fixes
-- [ ] Task: Fix missing documentation
+- [x] Task: Fix missing documentation [3913020]
     - [ ] Add an `@docs Buff` block to `docs/src/index.md`.
     - [ ] Run `julia --project=docs docs/make.jl` locally to verify the build passes without `:missing_docs` errors.
 - [ ] Task: Fix broken tests
