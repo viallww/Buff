@@ -7,4 +7,5 @@ using Test
     include("test_lttb.jl")
     include("test_upsample.jl")
     include("test_trend.jl")
+    include("test_plots.jl")
 end

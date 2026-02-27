@@ -48,6 +48,13 @@ using Buff
         @test_throws ArgumentError detect_outliers(data; method = :unknown)
     end
 
+    @testset "detect_outliers matrix" begin
+        mat = [1.0 100.0; 2.0 2.0; 3.0 3.0]
+        mask = detect_outliers(mat; method = :zscore, threshold = 1.0)
+        @test mask[1, 2] == true
+        @test size(mask) == size(mat)
+    end
+
     @testset "type stability" begin
         result = remove_outliers(Int[1, 2, 3, 200, 4])
         @test eltype(result) == Int

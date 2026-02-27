@@ -27,7 +27,7 @@ function interpolate_linear(
     length(x) == length(y) || throw(DimensionMismatch("x and y must have the same length"))
     length(x) >= 2          || throw(ArgumentError("Need at least 2 data points"))
 
-    itp = LinearInterpolation(float.(x), float.(y); extrapolation_bc = Flat())
+    itp = linear_interpolation(float.(x), float.(y); extrapolation_bc = Flat())
     return itp.(x_new)
 end
 
@@ -167,7 +167,7 @@ function fill_missing!(
         if length(obs) >= 2
             xf = Float64.(obs)
             yf = Float64.([data[i] for i in obs])
-            itp = LinearInterpolation(xf, yf)
+            itp = linear_interpolation(xf, yf)
             for i in 1:n
                 if ismissing(data[i])
                     data[i] = T(itp(Float64(i)))
