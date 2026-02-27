@@ -80,13 +80,19 @@ using Buff
     end
 
     @testset "lowpass_filter removes high freq" begin
-        t   = 0:0.001:1
-        low_f  = sin.(2π .* 1.0 .* collect(t))   # 1 Hz
-        high_f = sin.(2π .* 40.0 .* collect(t))  # 40 Hz
+        # Signal at 1000 Hz sample rate
+        fs = 1000.0
+        t  = 0:1/fs:2.0  # Longer signal (2 seconds)
+        low_f  = sin.(2π .* 2.0 .* collect(t))    # 2 Hz signal
+        high_f = 0.5 .* sin.(2π .* 100.0 .* collect(t))  # 100 Hz noise
         mixed  = low_f .+ high_f
-        # Low-pass at 10 Hz (fs=100) should mostly preserve the 1 Hz component
-        result = lowpass_filter(mixed, 10.0; fs = 100.0, order = 4)
-        @test maximum(abs.(result .- low_f)) < 0.1
+        # Low-pass at 10 Hz (fs=1000) should mostly preserve the 2 Hz component
+        result = lowpass_filter(mixed, 10.0; fs = fs, order = 4)
+        
+        # Compare in the middle of the signal to avoid edge transients
+        # Use a more realistic tolerance for Butterworth phase/amplitude response
+        range = (length(t) ÷ 4):(3 * length(t) ÷ 4)
+        @test maximum(abs.(result[range] .- low_f[range])) < 0.05
     end
 
     @testset "moving_average integer input – float output" begin

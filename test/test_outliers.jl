@@ -1,4 +1,5 @@
 using Test
+using Statistics
 using Buff
 
 @testset "Outliers" begin

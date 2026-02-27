@@ -155,7 +155,7 @@ function lowpass_filter(
     fs::Real    = 2.0,
     order::Integer = 4,
 )::Vector{float(T)} where {T<:Real}
-    f = digitalfilter(Lowpass(cutoff; fs = fs), Butterworth(order))
+    f = digitalfilter(Lowpass(cutoff), Butterworth(order); fs = fs)
     return filtfilt(f, float.(data))
 end
 
@@ -170,7 +170,7 @@ function highpass_filter(
     fs::Real       = 2.0,
     order::Integer = 4,
 )::Vector{float(T)} where {T<:Real}
-    f = digitalfilter(Highpass(cutoff; fs = fs), Butterworth(order))
+    f = digitalfilter(Highpass(cutoff), Butterworth(order); fs = fs)
     return filtfilt(f, float.(data))
 end
 
@@ -186,7 +186,7 @@ function bandpass_filter(
     fs::Real       = 2.0,
     order::Integer = 4,
 )::Vector{float(T)} where {T<:Real}
-    f = digitalfilter(Bandpass(lo, hi; fs = fs), Butterworth(order))
+    f = digitalfilter(Bandpass(lo, hi), Butterworth(order); fs = fs)
     return filtfilt(f, float.(data))
 end
 
@@ -202,7 +202,7 @@ function bandstop_filter(
     fs::Real       = 2.0,
     order::Integer = 4,
 )::Vector{float(T)} where {T<:Real}
-    f = digitalfilter(Bandstop(lo, hi; fs = fs), Butterworth(order))
+    f = digitalfilter(Bandstop(lo, hi), Butterworth(order); fs = fs)
     return filtfilt(f, float.(data))
 end
 
