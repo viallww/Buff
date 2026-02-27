@@ -27,7 +27,7 @@ function lttb(
     plot::Bool = false,
 )::Tuple{Vector{float(T)},Vector{float(T)}} where {T<:Real}
     x = collect(float(T), 1:length(y))
-    return lttb(x, y, n_out; plot = plot)
+    return lttb(x, float.(y), n_out; plot = plot)
 end
 
 """
