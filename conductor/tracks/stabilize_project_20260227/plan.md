@@ -1,7 +1,7 @@
 # Implementation Plan - Fix broken tests and CI pipeline
 
 ## Phase 1: CI Pipeline & Dependency Stabilization
-- [ ] Task: Update CI.yml trigger logic
+- [x] Task: Update CI.yml trigger logic [99ce21a]
     - [ ] Modify `.github/workflows/CI.yml` to trigger on `pull_request` and `push` (only `main`).
     - [ ] Verify the change by pushing to a branch and checking CI triggers.
 - [ ] Task: Fix Project.toml dependencies & [compat]
