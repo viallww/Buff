@@ -65,8 +65,8 @@ function upsample_linear(
 end
 
 # ---------------------------------------------------------------------------
-# Nearest-neighbour upsampling
-# (Interpolations.jl Gridded(Constant()) for non-uniform knots)
+# Nearest-neighbour upsampling (pure Julia – avoids Interpolations.jl API
+# version uncertainty for Gridded(Constant) boundary modes)
 # ---------------------------------------------------------------------------
 
 """
@@ -81,7 +81,7 @@ function upsample_nearest(
 )::Vector{T} where {T<:Real}
     x = collect(1.0:Float64(length(y)))
     _, y_new = upsample_nearest(x, y, factor; plot = plot)
-    return y_new
+    return collect(T, y_new)
 end
 
 function upsample_nearest(
@@ -96,10 +96,8 @@ function upsample_nearest(
     n >= 2          || throw(ArgumentError("Need at least 2 points"))
 
     xf    = float.(x)
-    itp   = interpolate((xf,), float.(y), Gridded(Constant{Nearest}()))
-    etp   = extrapolate(itp, Flat())
     x_new = range(xf[1], xf[end]; length = (n - 1) * factor + 1)
-    y_new = etp.(x_new)
+    y_new = _nearest(xf, float.(y), x_new)
 
     if plot;  _show_upsample_plot(x, y, x_new, y_new, "Nearest")  end
     return collect(float(Tx), x_new), y_new
@@ -113,18 +111,35 @@ function upsample_nearest(
 ) where {Tx<:Real,Ty<:Real}
     length(x) == length(y) || throw(DimensionMismatch("x and y must have same length"))
 
-    xf  = float.(x)
-    itp = interpolate((xf,), float.(y), Gridded(Constant{Nearest}()))
-    etp = extrapolate(itp, Flat())
-    y_new = etp.(x_new)
-
+    y_new = _nearest(float.(x), float.(y), x_new)
     if plot;  _show_upsample_plot(x, y, x_new, y_new, "Nearest")  end
     return collect(float(Tx), x_new), y_new
 end
 
 # ---------------------------------------------------------------------------
-# Internal plot helper
+# Internal helpers
 # ---------------------------------------------------------------------------
+
+function _nearest(
+    x::AbstractVector{F},
+    y::AbstractVector{F},
+    x_new,
+)::Vector{F} where {F<:AbstractFloat}
+    n      = length(x)
+    result = Vector{F}(undef, length(x_new))
+    for (k, xk) in enumerate(x_new)
+        if xk <= x[1];   result[k] = y[1];   continue  end
+        if xk >= x[n];   result[k] = y[n];   continue  end
+        lo, hi = 1, n
+        while hi - lo > 1
+            mid = (lo + hi) >>> 1
+            x[mid] <= xk ? lo = mid : hi = mid
+        end
+        result[k] = abs(xk - x[lo]) <= abs(xk - x[hi]) ? y[lo] : y[hi]
+    end
+    return result
+end
+
 function _show_upsample_plot(x_orig, y_orig, x_new, y_new, method_name::String)
     buff_mod  = Base.moduleroot(parentmodule(Upsample))
     plots_mod = getfield(buff_mod, :Plots)

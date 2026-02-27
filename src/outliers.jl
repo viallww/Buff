@@ -1,7 +1,7 @@
 module Outliers
 
 using Statistics
-using StatsBase: zscore, mad, winsor, quantile as sb_quantile
+using StatsBase: zscore, mad, winsor
 
 export detect_outliers, remove_outliers, winsorize
 
@@ -96,12 +96,10 @@ end
 """
     winsorize(data; limits=(0.05, 0.95)) -> Vector
 
-Clip extreme values so that `limits[1]` fraction of the lowest and
-`1 - limits[2]` fraction of the highest observations are replaced by the
-boundary quantile values.
-
-Delegates to `StatsBase.winsor` for symmetric limits and falls back to
-quantile-clamping for asymmetric limits.
+Clip extreme values so that observations below the `limits[1]` quantile are
+raised to that boundary, and observations above `limits[2]` are lowered to it.
+This delegates to `StatsBase.winsor` for symmetric limits and uses
+quantile-clamping directly for asymmetric limits.
 """
 function winsorize(
     data::AbstractVector{T};
