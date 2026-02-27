@@ -1,0 +1,10 @@
+name = "docs"
+
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Buff = "eecccd9e-c0b6-4062-a7b1-c47d1d274c9c"
+PlotlyJS = "f0f68f2c-4968-5e81-91da-67840de0976a"
+
+[compat]
+Documenter = "1"
+julia = "1.6"
